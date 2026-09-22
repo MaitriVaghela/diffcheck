@@ -43,24 +43,52 @@ if (o["account_age_days"] or 0) < 7:     # None -> 0 -> 0 < 7 -> True
     return False
 ```
 
-A *missing* age therefore means **day zero, a brand-new account**: a business
-decision written as defensive boilerplate. The model transcribes the comparison
-faithfully:
+A *missing* age therefore means **day zero, a brand-new account**. Zero is under
+every threshold, so a missing age triggers the restrictive branch every time.
+`return_eligible` refuses the return. `new_account_hold` holds the order. That is
+a business decision, written as defensive boilerplate.
 
-```json
-{"field": "account_age_days", "op": "<", "value": 7}
-```
+A decision table has no coercion. The six specs reach that gap three different
+ways:
 
-A decision table has no coercion, so the condition does not hold on `null`, the
-row is skipped, and the table returns the opposite answer. Right field, right
-threshold, right operator, right row order.
+| model | rule | what the spec does with a missing age | mechanism |
+|---|---|---|---|
+| `gpt-4o` | `new_account_hold` | nothing. one row, no null handling | omission |
+| `gpt-4o-mini` | `return_eligible` | nothing. no null handling | omission |
+| `gpt-4o` | `return_eligible` | one row requires `is_null` **and** `< 7` together | unsatisfiable guard |
+| `gpt-4.1-mini` | `return_eligible` | `not_null` guard on the `< 7` row | explicit decision |
+| `gpt-4o-mini` | `new_account_hold` | five `is_null` rows, every one returning `false` | explicit decision |
+| `gpt-4.1-mini` | `new_account_hold` | `is_null` and `amount > 500` returning `false` | explicit decision |
+
+Three mechanisms, one outcome: 132 and 88, in every run of every model.
+
+The unsatisfiable guard is worth a second look. `gpt-4o` wrote rows requiring a
+field to be null *and* to satisfy an ordered comparison. The engine cannot
+satisfy both, so those rows fire 0 times in 4000 inputs. `gpt-4o` did it twice in
+`return_eligible`, on `weight_kg` as well as `account_age_days`. The null
+handling is present in the file and inert in execution.
+
+The three explicit rows are the important ones. Those models did not overlook the
+null case. They decided it, and all three decided **an unknown age does not
+trigger the rule**. That is the exact reverse of what `or 0` means. The code says
+unknown is zero, so the rule always fires. Handling null is not the fix on its
+own: `gpt-4o-mini` wrote five `is_null` rows for `new_account_hold`, all
+returning `false`, and is still wrong on all 88.
+
+So the finding is not that the model missed the null case. It is that `or 0`
+encodes a business decision, a reader reliably reverses it, and tests written by
+such readers never probe it.
 
 Three things make it more than a bug report:
 
 - **Fixable.** One `is_null` row takes `return_eligible` from 132 disagreements
-  to 0. Every model had `is_null` and used it correctly elsewhere.
+  to 0, provided it returns `false`. The operator was available to every model.
+  It appears in three of these six specs, and in `gpt-4o` only inside rows that
+  can never fire.
 - **The rule was in the prompt.** It states that ordered comparisons do not hold
-  on missing fields. Having the fact was not enough to connect it to `or 0`.
+  on missing fields. `gpt-4.1-mini` applied it correctly and guarded every
+  ordered comparison with `not_null`. The fact was enough to predict what the
+  engine would do. It was not enough to preserve the decision `or 0` encodes.
 - **Null testing did not help, for a non-obvious reason.** The suite does test
   nulls. `insurance_required` even has a deliberate `amount=None` case, because
   that rule's source says `if amt is None` **visibly**, and it is never silent.
