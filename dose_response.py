@@ -61,8 +61,14 @@ def run(results_paths):
     # Which (model, rule) pairs actually diverge, from the committed results.
     diverges, specs = {}, {}
     for path in results_paths:
+        results = json.load(open(path))
+        # results/ also holds this script's own output, so `results/*.json`
+        # sweeps up files that are not a per-rule results list. Skip those.
+        if not (isinstance(results, list) and results
+                and isinstance(results[0], dict) and "rule" in results[0]):
+            continue
         model = os.path.basename(path).replace(".json", "")
-        for r in json.load(open(path)):
+        for r in results:
             if r["status"] != "ok":
                 continue
             diverges[(model, r["rule"])] = r["disagreements"] > 0

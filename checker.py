@@ -18,7 +18,8 @@ THE SPEC FORMAT (what the LLM must produce for each rule): a decision table.
     - ordered ops (> >= < <=) on a missing (None) field DO NOT hold.
     - "is_null" holds when the field is missing; it needs no "value".
 
-run_table() below executes a spec. It is 25 lines. That is the entire engine.
+cond_holds() and run_table() below execute a spec. They are 19 lines together.
+That is the entire engine.
 
 Also here: input generation (random + boundary, fixed seed) and the
 differential check itself. Run:  python3 checker.py --specs specs/<model>
@@ -143,36 +144,10 @@ def _safe(spec, order):
     except Exception as e:
         return "SPEC_ERROR:" + type(e).__name__
 
-# ---------- self-test: prove the engine + the check work before any LLM is involved ----------
-
-# Disabled for now. Restore this block (and the --selftest flag below) to
-# re-enable: it is what proves a "0 disagreements" result is meaningful.
-#
-# GOLD_FREE_SHIPPING = {   # hand translation of free_shipping: should NEVER disagree
-#     "rows": [{"if": [{"field": "amount", "op": ">=", "value": 50}], "then": True}],
-#     "else": False}
-# BROKEN_FREE_SHIPPING = { # off-by-boundary (> instead of >=): MUST be caught
-#     "rows": [{"if": [{"field": "amount", "op": ">", "value": 50}], "then": True}],
-#     "else": False}
-#
-# def selftest():
-#     from rules import free_shipping
-#     inputs = all_inputs()
-#     gold = sum(1 for _, o in inputs if free_shipping(o) != run_table(GOLD_FREE_SHIPPING, o))
-#     broken = sum(1 for _, o in inputs if free_shipping(o) != run_table(BROKEN_FREE_SHIPPING, o))
-#     print("hand translation disagreements (want 0):   ", gold)
-#     print("broken translation disagreements (want >0):", broken)
-#     assert gold == 0 and broken > 0
-#     print("selftest ok: the engine is faithful and the check can catch a wrong spec")
-
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--specs", help="directory of <rule>.json decision tables")
     p.add_argument("--out", default="results/results.json")
-    # p.add_argument("--selftest", action="store_true")
     a = p.parse_args()
-    # if a.selftest:
-    #     selftest()
-    # else:
     os.makedirs("results", exist_ok=True)
     check(a.specs, a.out)

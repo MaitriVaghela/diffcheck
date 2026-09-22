@@ -8,17 +8,31 @@ rule on at least one input. That translation would have shipped.
 
 ## Result
 
-3 models (`gpt-4o-mini`, `gpt-4o`, `gpt-4.1-mini`), 2 runs each, identical prompt
-and identical inputs throughout. 12 rules, 4000 inputs per rule.
+3 models (`gpt-4o-mini`, `gpt-4o`, `gpt-4.1-mini`) x 2 runs = **6 model-runs**.
+11 rules, 4000 inputs per rule, identical prompt and identical inputs throughout.
 
-**Core (reproducible).** `return_eligible` and `new_account_hold` diverge silently
-in all 6 runs with the same counts every time: **132 and 88**. Capability does not
-help; `gpt-4.1-mini` is the best translator overall and gets both exactly as wrong.
+**A silent divergence is reported only if it reproduces in every run of that
+model.** Two rules qualify:
 
-**Tail (noisy).** Other silent divergences appear and vanish between runs at
-temperature 0. Per-model totals move between 2/12 and 3/12. Cite the core.
+| rule | silent in | disagreements, every run |
+|---|---|---|
+| `return_eligible` | 6/6 model-runs | 132 |
+| `new_account_hold` | 6/6 model-runs | 88 |
 
-Per-run numbers are in `FINDINGS.md`, regenerated from the results.
+Same rules, same counts, across three models and two runs each. Capability does
+not help: `gpt-4.1-mini` has the fewest failures overall and gets both of these
+exactly as wrong.
+
+**Single-run silent divergences are excluded, deliberately.** `order_status` for
+`gpt-4o-mini` and `priority` for `gpt-4o` each appeared in one run of two.
+Translations are generated at temperature 0, but output still varies between
+calls, so a divergence seen once is not distinguishable from sampling noise.
+Counting it would inflate the result with variance. Excluding it is why the
+headline is a reproducible pair rather than a per-model rate, and per-model
+totals in `FINDINGS.md` (2/11 or 3/11) include the excluded cases.
+
+Distinguishing the two properly would take 3 to 5 runs per model. With two runs
+the honest claim is the reproducible core, which is the claim this project makes.
 
 ## Cause
 
@@ -52,9 +66,11 @@ Three things make it more than a bug report:
   that rule's source says `if amt is None` **visibly**, and it is never silent.
   Null testing tracks *visible* null handling; `or 0` does not look like any.
 
-A separate failure mode, `starts_with` and `not in` and other invented operators,
-fails **loudly**: caught by the suite every time. Complexity band predicts loud
-failure; the semantic gap predicts silent failure, and the band label misses it.
+A separate failure mode, invented operators such as `not in` and `not_in`, fails
+**loudly**: every such spec is caught by the suite. It is a failure to follow the
+output format, not a mistranslation, and it is not a third outcome; those specs
+sit inside "caught by tests". Complexity band predicts loud failure; the semantic
+gap predicts silent failure, and the band label misses it.
 
 ## Does a bigger test suite help?
 
@@ -62,11 +78,11 @@ No. `dose_response.py` varies suite size and, crucially, how test inputs are dra
 
 ```
 suite size                        5       10       25       50      100      200      400
-fields always present          8.22     7.28     6.67     6.47     6.25     6.08     6.00
-fields sometimes missing       7.17     5.90     3.17     1.80     0.55     0.05     0.00
+fields always present          7.65     7.05     6.62     6.47     6.25     6.08     6.00
+fields sometimes missing       6.60     5.67     3.12     1.80     0.55     0.05     0.00
 ```
 
-silent divergences out of 36 translations, mean of 40 drawn suites
+silent divergences out of 33 translations, mean of 40 drawn suites
 
 Every field populated, which is how people write tests: **flat at 6 from N=25 on**.
 400 cases catch what 25 catch. Fields missing 5% of the time: all found by 200.
@@ -81,7 +97,7 @@ API key in `.env` (gitignored) as `OPENAI_API_KEY=sk-...`.
 
 ```
 for m in gpt-4o-mini gpt-4o gpt-4.1-mini; do
-  python3 translate.py $m                                  # 12 API calls each
+  python3 translate.py $m                                  # 11 API calls each
   python3 checker.py --specs specs/$m --out results/$m.json
 done
 python3 analyze.py results/*.json          # tables + comparison FINDINGS.md
@@ -101,22 +117,19 @@ python3 checker.py --specs specs/gpt-4o-mini --out results/gpt-4o-mini.json && p
 
 | file | what it is |
 |---|---|
-| `rules.py` | 12 legacy rules, plain Python classifiers over an order record, in 3 complexity bands |
+| `rules.py` | 11 legacy rules, plain Python classifiers over an order record, in 3 complexity bands |
 | `make_tests.py` -> `tests.json` | 5 golden tests per rule, answers taken from the legacy rule, **frozen before any translation** |
 | `translate.py` | one frozen prompt per rule, temp 0, raw output saved to `specs/<model>/raw/` |
-| `checker.py` | 25-line decision-table engine + differential run on 4000 seeded inputs (2000 random, 2000 on the thresholds) |
+| `checker.py` | 19-line decision-table engine + differential run on 4000 seeded inputs (2000 random, 2000 on the thresholds) |
 | `analyze.py` -> `FINDINGS.md` | summary table and generated write-up; takes one results file or several |
 | `charts.py` -> `charts/` | the two charts that carry the finding |
 | `dose_response.py` | suite size vs input distribution |
 
 ## Why it holds up
 
-- The engine is 25 lines (`run_table`). Nothing is hidden.
+- The engine is 19 lines (`cond_holds` + `run_table`). Nothing is hidden.
 - Rules, tests, thresholds and seed are fixed before any translation exists and
   never edited after. Raw model output is kept beside every parsed table.
-- `checker.py` has a self-test (currently commented out): a hand translation must
-  give 0 disagreements, and a `>` for `>=` break must give more than 0. Both run
-  before any model output exists.
 - "No divergence found" means none appeared in 4000 inputs, not "proven equal".
 
 ## Limits
@@ -124,11 +137,16 @@ python3 checker.py --specs specs/gpt-4o-mini --out results/gpt-4o-mini.json && p
 - **The rules are mine.** I wrote the `or 0` that produces the core finding. The
   class of bug is demonstrated; the *rate* needs rules mined from real codebases.
 - **The core rests on one idiom.** Two instances, one mechanism, one field type.
-- **Per-model totals are noisy** between runs at temperature 0.
-- **`coupon_kind` is inexpressible, not mistranslated.** "Starts with SAVE" cannot
-  be written with the nine allowed operators unless the prompt enumerates every
-  coupon value, which it does not. Do not count it against a model.
-- **The harness has no test suite.** The engine, generator and response parser are
-  covered only by the commented-out self-test and ad-hoc checks.
+- **Two runs per model is thin.** It is enough to separate a reproducible result
+  from a single-run one, not enough to estimate how often the single-run kind
+  occurs. 3 to 5 runs per model would settle it.
+- **One rule was removed, not scored around.** `coupon_kind` classified coupons by
+  prefix, which the nine allowed operators cannot express, so no correct answer
+  existed and it tested nothing about translation. It is out of the rule set; its
+  raw responses remain in `specs/<model>/raw/`.
+- **The harness is unverified.** Nothing checks that the engine interprets a
+  correct spec faithfully, or that 4000 inputs are sharp enough to catch a
+  boundary error. Those two properties are what make a disagreement count mean
+  anything, and they currently rest on inspection alone.
 - Synthetic rules, one domain, classification only. Differential testing finds
   divergence but cannot prove its absence.

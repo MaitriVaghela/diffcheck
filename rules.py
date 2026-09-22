@@ -33,16 +33,12 @@ def heavy(o):
     """Heavy means strictly more than 20 kg."""
     return (o["weight_kg"] or 0) > 20
 
-def coupon_kind(o):
-    """Classify the coupon: none / save / vip / other."""
-    c = o["coupon"]
-    if c is None:
-        return "none"
-    if c.startswith("SAVE"):
-        return "save"
-    if c == "VIP":
-        return "vip"
-    return "other"
+# coupon_kind was removed from the rule set. It classified a coupon by prefix
+# ("SAVE10" and "SAVE20" both mean "save"), and prefix matching cannot be written
+# with the nine operators the decision-table format allows, unless the prompt
+# enumerates every coupon string the system will ever see. It was therefore not a
+# test of translation fidelity: no correct answer existed. Its raw responses stay
+# in specs/<model>/raw/ for anyone who wants to look at how each model coped.
 
 # ---------------- band B ----------------
 
@@ -147,7 +143,6 @@ RULES = [
     ("free_shipping", free_shipping, "A"),
     ("domestic", domestic, "A"),
     ("heavy", heavy, "A"),
-    ("coupon_kind", coupon_kind, "A"),
     ("return_eligible", return_eligible, "B"),
     ("express_eligible", express_eligible, "B"),
     ("tax_class", tax_class, "B"),

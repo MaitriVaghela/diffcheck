@@ -17,7 +17,6 @@ CASES = {
  "free_shipping":     [v(amount=20), v(amount=50), v(amount=80), v(amount=49.99), v(amount=500)],
  "domestic":          [v(country="US"), v(country="CA"), v(country="GB"), v(country="IN"), v(country="DE")],
  "heavy":             [v(weight_kg=2), v(weight_kg=25), v(weight_kg=20), v(weight_kg=20.5), v(weight_kg=0)],
- "coupon_kind":       [v(coupon=None), v(coupon="SAVE10"), v(coupon="SAVE20"), v(coupon="VIP"), v(coupon="BOGUS")],
  "return_eligible":   [v(), v(category="grocery"), v(weight_kg=35), v(account_age_days=3), v(category="books", weight_kg=29)],
  "express_eligible":  [v(tier="pro"), v(country="GB", tier="pro"), v(amount=250), v(amount=150, tier="basic"), v(weight_kg=12, tier="pro")],
  "tax_class":         [v(category="books"), v(category="grocery"), v(category="electronics", country="DE"), v(category="electronics", country="US"), v(category="furniture")],

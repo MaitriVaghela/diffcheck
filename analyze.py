@@ -194,14 +194,31 @@ def write_comparison(runs, out_path):
         "identical prompt and identical inputs across models, so the model is the "
         "only variable.\n")
 
-    add("## Headline\n")
-    add("| model | no divergence | **silent divergence** | caught by tests | format violations |")
-    add("|---|---|---|---|---|")
-    for m, _, bad in runs:
+    add("## Outcomes\n")
+    add(f"One outcome per translation. Mutually exclusive, and each row sums to "
+        f"{n_rules}.\n")
+    add("| model | no divergence found | **silent divergence** | caught by tests |")
+    add("|---|---|---|---|")
+    for m, _, _bad in runs:
         counts = {k: sum(1 for r in scored[m] if classify(r) == k)
                   for k in ("clean", "silent", "caught")}
         add(f"| `{m}` | {counts['clean']}/{n_rules} | **{counts['silent']}/{n_rules}** "
-            f"| {counts['caught']}/{n_rules} | {len(bad)}/{n_rules} |")
+            f"| {counts['caught']}/{n_rules} |")
+    add("")
+
+    # Format violations are a tag on some specs, not a fourth outcome. Every one
+    # of them lands in "caught by tests" above, so the counts deliberately overlap.
+    add("### Format violations (a tag, not an outcome)\n")
+    add("Some specs used an operator the engine does not implement, so the table "
+        "could not run at all. That is a failure to follow the output format, not "
+        "a mistranslation of the rule. **These are already counted in "
+        "*caught by tests* above** and are listed separately only because the two "
+        "failures mean different things.\n")
+    add("| model | specs using an invalid operator | which |")
+    add("|---|---|---|")
+    for m, _, bad in runs:
+        which = ", ".join(f"`{r}`" for r in bad) if bad else "none"
+        add(f"| `{m}` | {len(bad)}/{n_rules} | {which} |")
     add("")
 
     shared = set.intersection(*(set(v) for v in silent.values())) if silent else set()
@@ -299,8 +316,16 @@ def main():
     runs = []
     for path in results_paths:
         results = json.load(open(path))
+        # results/ also holds dose_response.json, so `analyze.py results/*.json`
+        # sweeps up files that are not a per-rule results list. Skip those.
+        if not (isinstance(results, list) and results
+                and isinstance(results[0], dict) and "rule" in results[0]):
+            print(f"skipping {path}: not a per-rule results file")
+            continue
         model = os.path.basename(path).replace(".json", "")
         runs.append((model, results, invalid_ops(os.path.join("specs", model))))
+    if not runs:
+        raise SystemExit("no usable results files given")
 
     for model, results, bad_ops in runs:
         if len(runs) > 1:
@@ -310,8 +335,8 @@ def main():
         print_table(results, bad_ops)
         print(f"\nrules scored: {len(scored)}")
         print(f"silent divergence: {len(silent)}/{len(scored)}")
-        print(f"format violations (spec used an operator outside the allowed 9): "
-              f"{len(bad_ops)}/{len(scored)}\n")
+        # Not a fourth outcome: these sit inside "caught by tests" above.
+        print(f"of which used an invalid operator: {len(bad_ops)}/{len(scored)}\n")
 
     if len(runs) == 1:
         model, results, bad_ops = runs[0]
