@@ -1,0 +1,79 @@
+```json
+{
+  "rows": [
+    {
+      "if": [
+        {"field": "tier", "op": "==", "value": "pro"},
+        {"field": "is_return", "op": "is_null"}
+      ],
+      "then": "high"
+    },
+    {
+      "if": [
+        {"field": "tier", "op": "==", "value": "pro"},
+        {"field": "is_return", "op": "==", "value": false}
+      ],
+      "then": "high"
+    },
+    {
+      "if": [
+        {"field": "tier", "op": "==", "value": "plus"},
+        {"field": "amount", "op": ">", "value": 300},
+        {"field": "is_return", "op": "is_null"}
+      ],
+      "then": "high"
+    },
+    {
+      "if": [
+        {"field": "tier", "op": "==", "value": "plus"},
+        {"field": "amount", "op": ">", "value": 300},
+        {"field": "is_return", "op": "==", "value": false}
+      ],
+      "then": "high"
+    },
+    {
+      "if": [
+        {"field": "amount", "op": ">", "value": 1000},
+        {"field": "is_return", "op": "is_null"}
+      ],
+      "then": "high"
+    },
+    {
+      "if": [
+        {"field": "amount", "op": ">", "value": 1000},
+        {"field": "is_return", "op": "==", "value": false}
+      ],
+      "then": "high"
+    },
+    {
+      "if": [
+        {"field": "is_return", "op": "==", "value": true},
+        {"field": "tier", "op": "==", "value": "pro"}
+      ],
+      "then": "medium"
+    },
+    {
+      "if": [
+        {"field": "is_return", "op": "==", "value": true},
+        {"field": "tier", "op": "==", "value": "plus"},
+        {"field": "amount", "op": ">", "value": 300}
+      ],
+      "then": "medium"
+    },
+    {
+      "if": [
+        {"field": "is_return", "op": "==", "value": true},
+        {"field": "amount", "op": ">", "value": 1000}
+      ],
+      "then": "medium"
+    },
+    {
+      "if": [
+        {"field": "amount", "op": ">=", "value": 100}
+      ],
+      "then": "medium"
+    }
+  ],
+  "else": "low"
+}
+```

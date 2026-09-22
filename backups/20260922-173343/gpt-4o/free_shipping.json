@@ -1,0 +1,4 @@
+{
+ "field": "amount",
+ "not_null": true
+}

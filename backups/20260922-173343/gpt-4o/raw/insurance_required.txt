@@ -1,0 +1,11 @@
+```json
+{
+  "rows": [
+    {"if": [{"field": "amount", "is_null": true}], "then": false},
+    {"if": [{"field": "amount", ">=", "value": 750}], "then": true},
+    {"if": [{"field": "category", "==", "value": "electronics"}, {"field": "amount", ">=", "value": 300}], "then": true},
+    {"if": [{"field": "country", "not_in": ["US", "CA"]}, {"field": "amount", ">=", "value": 200}], "then": true}
+  ],
+  "else": false
+}
+```

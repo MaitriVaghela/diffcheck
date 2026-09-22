@@ -1,0 +1,43 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "category",
+     "op": "==",
+     "value": "grocery"
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "weight_kg",
+     "op": "not_null"
+    },
+    {
+     "field": "weight_kg",
+     "op": ">=",
+     "value": 30
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "not_null"
+    },
+    {
+     "field": "account_age_days",
+     "op": "<",
+     "value": 7
+    }
+   ],
+   "then": false
+  }
+ ],
+ "else": true
+}

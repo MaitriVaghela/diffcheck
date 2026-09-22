@@ -1,0 +1,9 @@
+{
+ "if": [
+  {
+   "field": "amount",
+   "is_null": true
+  }
+ ],
+ "then": false
+}

@@ -1,0 +1,34 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "weight_kg",
+     "op": ">",
+     "value": 20
+    }
+   ],
+   "then": true
+  },
+  {
+   "if": [
+    {
+     "field": "weight_kg",
+     "op": "is_null"
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "weight_kg",
+     "op": "<=",
+     "value": 20
+    }
+   ],
+   "then": false
+  }
+ ],
+ "else": false
+}

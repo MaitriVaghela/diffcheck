@@ -1,0 +1,50 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "coupon",
+     "op": "is_null"
+    }
+   ],
+   "then": "none"
+  },
+  {
+   "if": [
+    {
+     "field": "coupon",
+     "op": "not_null"
+    },
+    {
+     "field": "coupon",
+     "op": "in",
+     "value": [
+      "SAVE",
+      "SAVE1",
+      "SAVE2",
+      "SAVE3",
+      "SAVE4",
+      "SAVE5",
+      "SAVE6",
+      "SAVE7",
+      "SAVE8",
+      "SAVE9",
+      "SAVE10"
+     ]
+    }
+   ],
+   "then": "save"
+  },
+  {
+   "if": [
+    {
+     "field": "coupon",
+     "op": "==",
+     "value": "VIP"
+    }
+   ],
+   "then": "vip"
+  }
+ ],
+ "else": "other"
+}

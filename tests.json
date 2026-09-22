@@ -1,0 +1,866 @@
+{
+ "free_shipping": [
+  {
+   "input": {
+    "amount": 20,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 50,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 80,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 49.99,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 500,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  }
+ ],
+ "domestic": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "CA",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "GB",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "IN",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "DE",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  }
+ ],
+ "heavy": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 25,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 20,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 20.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 0,
+    "is_return": false
+   },
+   "expected": false
+  }
+ ],
+ "coupon_kind": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "none"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": "SAVE10",
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "save"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": "SAVE20",
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "save"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": "VIP",
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "vip"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": "BOGUS",
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "other"
+  }
+ ],
+ "return_eligible": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "grocery",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 35,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 3,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "books",
+    "weight_kg": 29,
+    "is_return": false
+   },
+   "expected": true
+  }
+ ],
+ "express_eligible": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "pro",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "GB",
+    "tier": "pro",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 250,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 150,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "pro",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 12,
+    "is_return": false
+   },
+   "expected": false
+  }
+ ],
+ "tax_class": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "books",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "exempt"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "grocery",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "reduced"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "DE",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "electronics",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "high"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "electronics",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "standard"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "furniture",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "standard"
+  }
+ ],
+ "new_account_hold": [
+  {
+   "input": {
+    "amount": 600,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 5,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 400,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 5,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 900,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 100,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": 501,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 29,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 800,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 30,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  }
+ ],
+ "fraud_band": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "low"
+  },
+  {
+   "input": {
+    "amount": 1500,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "medium"
+  },
+  {
+   "input": {
+    "amount": 1500,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 3,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "high"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "BR",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": true
+   },
+   "expected": "medium"
+  },
+  {
+   "input": {
+    "amount": 2000,
+    "item_count": 3,
+    "country": "IN",
+    "tier": "basic",
+    "account_age_days": 1,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": true
+   },
+   "expected": "high"
+  }
+ ],
+ "priority": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "pro",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "high"
+  },
+  {
+   "input": {
+    "amount": 400,
+    "item_count": 3,
+    "country": "US",
+    "tier": "plus",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "high"
+  },
+  {
+   "input": {
+    "amount": 1200,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "high"
+  },
+  {
+   "input": {
+    "amount": 150,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "medium"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "pro",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": true
+   },
+   "expected": "medium"
+  }
+ ],
+ "insurance_required": [
+  {
+   "input": {
+    "amount": 800,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 400,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "electronics",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 250,
+    "item_count": 3,
+    "country": "GB",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": true
+  },
+  {
+   "input": {
+    "amount": 100,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  },
+  {
+   "input": {
+    "amount": null,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": false
+  }
+ ],
+ "order_status": [
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "accept"
+  },
+  {
+   "input": {
+    "amount": 2000,
+    "item_count": 3,
+    "country": "IN",
+    "tier": "basic",
+    "account_age_days": 1,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "reject"
+  },
+  {
+   "input": {
+    "amount": 900,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 5,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": false
+   },
+   "expected": "review"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "grocery",
+    "weight_kg": 2.5,
+    "is_return": true
+   },
+   "expected": "reject"
+  },
+  {
+   "input": {
+    "amount": 120.0,
+    "item_count": 3,
+    "country": "US",
+    "tier": "basic",
+    "account_age_days": 400,
+    "coupon": null,
+    "category": "apparel",
+    "weight_kg": 2.5,
+    "is_return": true
+   },
+   "expected": "accept"
+  }
+ ]
+}

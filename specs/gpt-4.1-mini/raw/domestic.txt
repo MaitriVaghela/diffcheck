@@ -1,0 +1,13 @@
+```json
+{
+  "rows": [
+    {
+      "if": [
+        {"field": "country", "op": "in", "value": ["US", "CA"]}
+      ],
+      "then": true
+    }
+  ],
+  "else": false
+}
+```

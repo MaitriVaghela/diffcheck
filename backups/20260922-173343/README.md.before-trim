@@ -1,0 +1,171 @@
+# DiffCheck
+
+**Question:** when a business rule is migrated from imperative code to a
+declarative spec, how often does the migrated version **pass its tests and
+still behave differently** from the original?
+
+## The pieces
+
+| file | what it is |
+|---|---|
+| `rules.py` | 12 legacy rules: plain Python classifiers over an order record, in 3 complexity bands |
+| `make_tests.py` -> `tests.json` | 5 golden tests per rule, taken from the legacy rule (the legacy system is the oracle), **frozen before any translation** |
+| `translate.py` | asks an LLM to migrate each rule to a JSON decision table (one frozen prompt, temp 0, raw output saved) |
+| `checker.py` | a 25-line decision-table engine + differential run: legacy vs table on 4000 seeded inputs (2000 random, 2000 on the thresholds) |
+| `analyze.py` -> `FINDINGS.md` | the summary table, the headline, and the generated write-up |
+| `charts.py` -> `charts/` | the two charts that carry the finding (matplotlib) |
+| `dose_response.py` | does a bigger test suite help? varies suite size and input distribution |
+
+## The headline
+
+**Silent divergence** = passes all 5 tests AND disagrees with the legacy rule
+on at least one input. That translation would have shipped.
+
+Current numbers live in `FINDINGS.md`, regenerated from the results on every run.
+
+## What the pilot found
+
+Three models (`gpt-4o-mini`, `gpt-4o`, `gpt-4.1-mini`), two independent runs each,
+identical prompt and identical inputs throughout. The result splits into a
+**deterministic core** and a **stochastic tail**.
+
+### The core: two rules fail the same way every time
+
+`return_eligible` and `new_account_hold` diverge silently in **all six runs**, with
+the same disagreement counts every time: **132 and 88**. Same rules, same numbers,
+across models and across reruns. That reproducibility is the strongest evidence in
+the project: it points at the task rather than at any model, and capability does not
+help. `gpt-4.1-mini` is the better translator overall and gets these two exactly as
+wrong.
+
+Both fail for the same reason: **a null-handling idiom with no counterpart in the
+target format.**
+
+The legacy Python coalesces missing values to zero:
+
+```python
+if (o["account_age_days"] or 0) < 7:     # None -> 0 -> 0 < 7 -> True
+    return False
+```
+
+A *missing* account age is therefore treated as **day zero, a brand-new account**:
+a real business decision hiding inside an idiom. The model transcribed the comparison
+faithfully:
+
+```json
+{"field": "account_age_days", "op": "<", "value": 7}
+```
+
+but a decision table has no coalescing, so an ordered comparison on a missing field
+does not hold, the row is skipped, and the table returns the opposite answer. Nothing
+about the table looks wrong: right threshold, right operator, right row order.
+
+Three things make this the interesting case rather than a bug report:
+
+- **It was fixable.** Adding one `is_null` row takes `return_eligible` from 132
+  disagreements to 0. Every model had `is_null` available and used it correctly
+  elsewhere. This is not an inexpressible rule, just a missed one.
+- **The model had been told the rule.** The prompt states that ordered comparisons do
+  not hold on a missing field. Having the fact was not enough to connect it to `or 0`
+  in the source.
+- **The golden tests could not catch it, and not for the obvious reason.** The suite
+  *does* test nulls: every case has a null coupon, and `insurance_required` has a
+  deliberate `amount=None` case. But `insurance_required` is the one rule whose source
+  says `if amt is None` **visibly**, so someone wrote the test, and it is never a
+  silent divergence. Null testing tracks *visible* null handling. `or 0` reads as a
+  default value, not a null branch, so no one writes the case.
+
+### The tail: other silent divergences come and go
+
+Beyond that core, silent divergences appear and vanish between runs at temperature 0:
+`order_status` for `gpt-4o-mini`, `priority` for `gpt-4o`, neither present in the
+previous run. Per-model totals therefore move (2/12 or 3/12); the core does not.
+Report the core as the finding and the tail as variance.
+
+A second, separate failure mode showed up as well: several specs used operators outside
+the nine they were given (`starts_with`, `not in`). Those are format-adherence failures,
+not reasoning failures, and they fail **loudly**, caught by the test suite every time.
+The distinction matters: complexity band predicts loud failure; the semantic gap
+predicts the silent kind, and the band label does not capture it.
+
+## Would more tests have caught it?
+
+No. `dose_response.py` gives every translation suites of 5 to 400 golden tests and
+measures how many silent divergences survive, varying **how the test inputs are
+drawn** rather than only how many there are:
+
+```
+suite size                        5       10       25       50      100      200      400
+fields always present          8.22     7.28     6.67     6.47     6.25     6.08     6.00
+fields sometimes missing       7.17     5.90     3.17     1.80     0.55     0.05     0.00
+```
+
+(silent divergences out of 36 translations, mean of 40 independently drawn suites)
+
+With every field populated, which is how people write tests, the curve **flattens at 6
+and stays there**. 400 hand-style cases catch exactly what 25 catch. Those 6 are the
+deterministic core: 2 rules x 3 models, permanently invisible at any suite size.
+
+Let fields go missing 5% of the time and the same bugs are all found by 200 cases.
+Same rules, same specs, same effort per case. **Suite size does not predict migration
+safety; suite distribution does.**
+
+Both conditions test null *values*. They differ in whether a field can be absent
+altogether. See `charts/dose_response.png`.
+
+## Run
+
+The API key goes in `.env` (gitignored) as `OPENAI_API_KEY=sk-...`.
+
+```
+python3 make_tests.py                   # freeze the golden tests (already committed)
+
+for m in gpt-4o-mini gpt-4o gpt-4.1-mini; do
+  python3 translate.py $m                                           # 12 API calls each
+  python3 checker.py --specs specs/$m --out results/$m.json
+done
+
+python3 analyze.py results/*.json       # per-model tables + one comparison FINDINGS.md
+python3 charts.py results/gpt-4o-mini.json          # charts/*.png (needs matplotlib)
+python3 dose_response.py results/*.json             # the suite-size study
+```
+
+`analyze.py` takes one results file (per-model document) or several (comparison
+document). Re-scoring specs already on disk costs nothing and skips the model:
+
+```
+python3 checker.py --specs specs/gpt-4o-mini --out results/gpt-4o-mini.json && python3 analyze.py results/gpt-4o-mini.json
+```
+
+## Why it is defensible
+
+- The engine is 25 lines (`run_table` in checker.py); there is nothing hidden to defend.
+- The self-test in `checker.py` (currently commented out) shows a hand translation never
+  disagrees (the engine is faithful) and a one-character break, `>` for `>=`, is caught
+  (the check works). Both run before any LLM output exists.
+- Rules, tests, thresholds and seed are fixed first; translations come after; nothing upstream
+  is edited afterwards. Raw model output is kept next to every parsed table.
+- Finding no divergence is also a result: it means "none found on 4000 inputs", not "proven equal".
+
+## Limits, stated up front
+
+Synthetic rules, one domain, classification only (no computed amounts);
+5 golden tests per rule is a modeling choice (real suites vary); differential
+testing finds divergence but cannot prove absence; the null/boundary behaviour
+of the table format is defined above, and the LLM is told it.
+
+More specifically:
+
+- **The rules are mine.** I wrote the `or 0` idiom that produces the core finding.
+  The claim that this class of bug exists is solid; the claim that it occurs at any
+  particular *rate* needs rules mined from real codebases.
+- **The core rests on one idiom.** Both reproducible silent divergences are the same
+  null-coalescing gap on the same field type. Two instances, one mechanism.
+- **Per-model totals are noisy.** Silent divergences outside the core appear and
+  vanish between runs at temperature 0. Cite the core, not the per-model count.
+- **`coupon_kind` is inexpressible, not mistranslated.** "Starts with SAVE" cannot be
+  written with the nine allowed operators unless the prompt enumerates every coupon
+  value, which it does not. Do not count that rule against a model.
+- **The harness has no test suite.** The engine, the input generator and the response
+  parser are verified only by the commented-out self-test in `checker.py` and by
+  ad-hoc checks. Given the project's own argument, that is an awkward gap.

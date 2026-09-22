@@ -1,0 +1,36 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "coupon",
+     "is_null": true
+    }
+   ],
+   "then": "none"
+  },
+  {
+   "if": [
+    {
+     "field": "coupon",
+     "op": "in",
+     "value": [
+      "SAVE"
+     ]
+    }
+   ],
+   "then": "save"
+  },
+  {
+   "if": [
+    {
+     "field": "coupon",
+     "op": "==",
+     "value": "VIP"
+    }
+   ],
+   "then": "vip"
+  }
+ ],
+ "else": "other"
+}

@@ -1,0 +1,97 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "<",
+     "value": 30
+    },
+    {
+     "field": "amount",
+     "op": ">",
+     "value": 500
+    }
+   ],
+   "then": true
+  },
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "is_null"
+    },
+    {
+     "field": "amount",
+     "op": "is_null"
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "is_null"
+    },
+    {
+     "field": "amount",
+     "op": ">",
+     "value": 500
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "<",
+     "value": 30
+    },
+    {
+     "field": "amount",
+     "op": "is_null"
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "not_null"
+    },
+    {
+     "field": "amount",
+     "op": "not_null"
+    },
+    {
+     "field": "account_age_days",
+     "op": ">=",
+     "value": 30
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "account_age_days",
+     "op": "not_null"
+    },
+    {
+     "field": "amount",
+     "op": "not_null"
+    },
+    {
+     "field": "amount",
+     "op": "<=",
+     "value": 500
+    }
+   ],
+   "then": false
+  }
+ ],
+ "else": false
+}

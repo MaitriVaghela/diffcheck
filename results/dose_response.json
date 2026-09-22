@@ -1,0 +1,16 @@
+{
+ "fields always present|5": 8.225,
+ "fields always present|10": 7.275,
+ "fields always present|25": 6.675,
+ "fields always present|50": 6.475,
+ "fields always present|100": 6.25,
+ "fields always present|200": 6.075,
+ "fields always present|400": 6.0,
+ "fields sometimes missing|5": 7.175,
+ "fields sometimes missing|10": 5.9,
+ "fields sometimes missing|25": 3.175,
+ "fields sometimes missing|50": 1.8,
+ "fields sometimes missing|100": 0.55,
+ "fields sometimes missing|200": 0.05,
+ "fields sometimes missing|400": 0.0
+}

@@ -1,0 +1,98 @@
+```json
+{
+  "rows": [
+    {
+      "if": [
+        {"field": "coupon", "op": "is_null"}
+      ],
+      "then": "none"
+    },
+    {
+      "if": [
+        {"field": "coupon", "op": "not_null"},
+        {"field": "coupon", "op": "in", "value": ["SAVE", "SAVE1", "SAVE2", "SAVE3", "SAVE4", "SAVE5", "SAVE6", "SAVE7", "SAVE8", "SAVE9", "SAVE10"]}
+      ],
+      "then": "save"
+    },
+    {
+      "if": [
+        {"field": "coupon", "op": "==", "value": "VIP"}
+      ],
+      "then": "vip"
+    }
+  ],
+  "else": "other"
+}
+```
+
+---
+
+**Note:** The above tries to replicate `c.startswith("SAVE")` by checking if `coupon` is in a list of strings starting with "SAVE". But since the decision table cannot do `startswith`, and no substring ops are allowed, we cannot directly check `startswith`.
+
+We must find a way to encode `c.startswith("SAVE")` without function calls or substring ops.
+
+**Reconsidering:**
+
+- The only ops allowed are: `==`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `is_null`, `not_null`.
+- No substring or regex.
+- The field `coupon` is a string or null.
+- We want to check if `coupon` starts with `"SAVE"`.
+
+Since no substring ops, the only way is to check if `coupon` is in a set of strings starting with `"SAVE"`.
+
+But the problem states the table must return exactly the same value for every possible order record, including records with null fields.
+
+But the coupon field can be any string, not just a fixed set.
+
+Therefore, we cannot enumerate all possible coupons starting with `"SAVE"`.
+
+Hence, the only way is to check if `coupon` is not null and `coupon` starts with `"SAVE"`.
+
+But since no substring ops, the only way is to check if `coupon` is not null and `coupon` >= `"SAVE"` and `coupon` < `"SAVF"` (lexicographically).
+
+Because all strings starting with `"SAVE"` are lexicographically between `"SAVE"` and `"SAVF"` (since 'E' is followed by 'F').
+
+So we can do:
+
+- `coupon` >= `"SAVE"`
+- `coupon` < `"SAVF"`
+
+This will capture all strings starting with `"SAVE"`.
+
+So the decision table rows should be:
+
+1. If `coupon` is null => "none"
+2. If `coupon` >= "SAVE" and `coupon` < "SAVF" => "save"
+3. If `coupon` == "VIP" => "vip"
+4. else => "other"
+
+---
+
+**Final answer:**
+
+```json
+{
+  "rows": [
+    {
+      "if": [
+        {"field": "coupon", "op": "is_null"}
+      ],
+      "then": "none"
+    },
+    {
+      "if": [
+        {"field": "coupon", "op": ">=", "value": "SAVE"},
+        {"field": "coupon", "op": "<", "value": "SAVF"}
+      ],
+      "then": "save"
+    },
+    {
+      "if": [
+        {"field": "coupon", "op": "==", "value": "VIP"}
+      ],
+      "then": "vip"
+    }
+  ],
+  "else": "other"
+}
+```

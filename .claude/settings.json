@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(rm -rf /tmp/dcx)",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('translate.py'\\).read\\(\\)\\); print\\('ok'\\)\")",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('translate.py'\\).read\\(\\)\\); print\\('compiles ok'\\)\")",
+      "Bash(sed -n '/^\\\\*\\\\*Note/,/^\\\\`\\\\`\\\\`json/p' specs/gpt-4.1-mini/raw/coupon_kind.txt)"
+    ]
+  }
+}

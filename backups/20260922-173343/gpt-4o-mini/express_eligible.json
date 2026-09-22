@@ -1,0 +1,60 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "country",
+     "op": "not_null"
+    },
+    {
+     "field": "country",
+     "op": "not in",
+     "value": [
+      "US",
+      "CA"
+     ]
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "weight_kg",
+     "op": "not_null"
+    },
+    {
+     "field": "weight_kg",
+     "op": ">=",
+     "value": 10
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "tier",
+     "op": "==",
+     "value": "pro"
+    }
+   ],
+   "then": true
+  },
+  {
+   "if": [
+    {
+     "field": "amount",
+     "op": "not_null"
+    },
+    {
+     "field": "amount",
+     "op": ">=",
+     "value": 200
+    }
+   ],
+   "then": true
+  }
+ ],
+ "else": false
+}

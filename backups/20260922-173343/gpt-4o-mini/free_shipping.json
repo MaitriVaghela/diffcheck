@@ -1,0 +1,34 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "amount",
+     "op": ">=",
+     "value": 50
+    }
+   ],
+   "then": true
+  },
+  {
+   "if": [
+    {
+     "field": "amount",
+     "op": "is_null"
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "amount",
+     "op": "<",
+     "value": 50
+    }
+   ],
+   "then": false
+  }
+ ],
+ "else": false
+}

@@ -1,0 +1,22 @@
+```json
+{
+  "rows": [
+    {
+      "if": [{"field": "category", "op": "==", "value": "books"}],
+      "then": "exempt"
+    },
+    {
+      "if": [{"field": "category", "op": "==", "value": "grocery"}],
+      "then": "reduced"
+    },
+    {
+      "if": [
+        {"field": "category", "op": "==", "value": "electronics"},
+        {"field": "country", "op": "==", "value": "DE"}
+      ],
+      "then": "high"
+    }
+  ],
+  "else": "standard"
+}
+```

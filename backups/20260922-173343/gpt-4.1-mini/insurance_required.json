@@ -1,0 +1,61 @@
+{
+ "rows": [
+  {
+   "if": [
+    {
+     "field": "amount",
+     "op": "is_null"
+    }
+   ],
+   "then": false
+  },
+  {
+   "if": [
+    {
+     "field": "amount",
+     "op": ">=",
+     "value": 750
+    }
+   ],
+   "then": true
+  },
+  {
+   "if": [
+    {
+     "field": "category",
+     "op": "==",
+     "value": "electronics"
+    },
+    {
+     "field": "amount",
+     "op": ">=",
+     "value": 300
+    }
+   ],
+   "then": true
+  },
+  {
+   "if": [
+    {
+     "field": "country",
+     "op": "not_null"
+    },
+    {
+     "field": "country",
+     "op": "not in",
+     "value": [
+      "US",
+      "CA"
+     ]
+    },
+    {
+     "field": "amount",
+     "op": ">=",
+     "value": 200
+    }
+   ],
+   "then": true
+  }
+ ],
+ "else": false
+}

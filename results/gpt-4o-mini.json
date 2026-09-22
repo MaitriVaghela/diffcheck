@@ -1,0 +1,794 @@
+[
+ {
+  "rule": "free_shipping",
+  "band": "A",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 0,
+  "spec_errors": 0,
+  "logic_diffs": 0,
+  "examples": []
+ },
+ {
+  "rule": "domestic",
+  "band": "A",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 0,
+  "spec_errors": 0,
+  "logic_diffs": 0,
+  "examples": []
+ },
+ {
+  "rule": "heavy",
+  "band": "A",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 0,
+  "spec_errors": 0,
+  "logic_diffs": 0,
+  "examples": []
+ },
+ {
+  "rule": "coupon_kind",
+  "band": "A",
+  "status": "ok",
+  "tests_passed": 1,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 2990,
+  "spec_errors": 2990,
+  "logic_diffs": 0,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 178.68,
+     "item_count": 16,
+     "country": "US",
+     "tier": "pro",
+     "account_age_days": 430,
+     "coupon": "BOGUS",
+     "category": "furniture",
+     "weight_kg": 0.1,
+     "is_return": false
+    },
+    "legacy": "other",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 967.19,
+     "item_count": null,
+     "country": "JP",
+     "tier": "plus",
+     "account_age_days": 408,
+     "coupon": "BOGUS",
+     "category": "electronics",
+     "weight_kg": 32.1,
+     "is_return": false
+    },
+    "legacy": "other",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 723.17,
+     "item_count": 3,
+     "country": "DE",
+     "tier": "pro",
+     "account_age_days": 558,
+     "coupon": "VIP",
+     "category": "apparel",
+     "weight_kg": 25.87,
+     "is_return": false
+    },
+    "legacy": "vip",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 602.92,
+     "item_count": null,
+     "country": "CA",
+     "tier": "pro",
+     "account_age_days": 535,
+     "coupon": "FREESHIP",
+     "category": "books",
+     "weight_kg": 19.42,
+     "is_return": false
+    },
+    "legacy": "other",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1211.94,
+     "item_count": 1,
+     "country": "GB",
+     "tier": "basic",
+     "account_age_days": 733,
+     "coupon": "SAVE5",
+     "category": "grocery",
+     "weight_kg": 7.32,
+     "is_return": false
+    },
+    "legacy": "save",
+    "new": "SPEC_ERROR:ValueError"
+   }
+  ]
+ },
+ {
+  "rule": "return_eligible",
+  "band": "B",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 132,
+  "spec_errors": 0,
+  "logic_diffs": 132,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": null,
+     "item_count": 19,
+     "country": "DE",
+     "tier": "pro",
+     "account_age_days": null,
+     "coupon": "FREESHIP",
+     "category": "furniture",
+     "weight_kg": 1.14,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": true
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 811.17,
+     "item_count": 10,
+     "country": "US",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": null,
+     "category": "electronics",
+     "weight_kg": 20.83,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": true
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 266.97,
+     "item_count": 2,
+     "country": "IN",
+     "tier": "plus",
+     "account_age_days": null,
+     "coupon": "FREESHIP",
+     "category": "books",
+     "weight_kg": 18.95,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": true
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": null,
+     "item_count": 16,
+     "country": null,
+     "tier": null,
+     "account_age_days": null,
+     "coupon": null,
+     "category": "apparel",
+     "weight_kg": 7.87,
+     "is_return": true
+    },
+    "legacy": false,
+    "new": true
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1110.9,
+     "item_count": 18,
+     "country": "IN",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": "BOGUS",
+     "category": null,
+     "weight_kg": 3.83,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": true
+   }
+  ]
+ },
+ {
+  "rule": "express_eligible",
+  "band": "B",
+  "status": "ok",
+  "tests_passed": 0,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 3851,
+  "spec_errors": 3804,
+  "logic_diffs": 47,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 178.68,
+     "item_count": 16,
+     "country": "US",
+     "tier": "pro",
+     "account_age_days": 430,
+     "coupon": "BOGUS",
+     "category": "furniture",
+     "weight_kg": 0.1,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": null,
+     "item_count": 15,
+     "country": "CA",
+     "tier": "plus",
+     "account_age_days": 365,
+     "coupon": null,
+     "category": "apparel",
+     "weight_kg": 21.52,
+     "is_return": true
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 967.19,
+     "item_count": null,
+     "country": "JP",
+     "tier": "plus",
+     "account_age_days": 408,
+     "coupon": "BOGUS",
+     "category": "electronics",
+     "weight_kg": 32.1,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 597.22,
+     "item_count": 13,
+     "country": "DE",
+     "tier": "basic",
+     "account_age_days": 784,
+     "coupon": null,
+     "category": "furniture",
+     "weight_kg": 4.1,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 723.17,
+     "item_count": 3,
+     "country": "DE",
+     "tier": "pro",
+     "account_age_days": 558,
+     "coupon": "VIP",
+     "category": "apparel",
+     "weight_kg": 25.87,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   }
+  ]
+ },
+ {
+  "rule": "tax_class",
+  "band": "B",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 0,
+  "spec_errors": 0,
+  "logic_diffs": 0,
+  "examples": []
+ },
+ {
+  "rule": "new_account_hold",
+  "band": "B",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 88,
+  "spec_errors": 0,
+  "logic_diffs": 88,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 811.17,
+     "item_count": 10,
+     "country": "US",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": null,
+     "category": "electronics",
+     "weight_kg": 20.83,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": false
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 749.67,
+     "item_count": 0,
+     "country": "IN",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": null,
+     "category": "grocery",
+     "weight_kg": 5.79,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": false
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1110.9,
+     "item_count": 18,
+     "country": "IN",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": "BOGUS",
+     "category": null,
+     "weight_kg": 3.83,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": false
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 515.97,
+     "item_count": 16,
+     "country": "DE",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": "SAVE20",
+     "category": "grocery",
+     "weight_kg": 34.04,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": false
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 556.37,
+     "item_count": 9,
+     "country": "BR",
+     "tier": "basic",
+     "account_age_days": null,
+     "coupon": "SAVE10",
+     "category": "furniture",
+     "weight_kg": 31.18,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": false
+   }
+  ]
+ },
+ {
+  "rule": "fraud_band",
+  "band": "C",
+  "status": "ok",
+  "tests_passed": 2,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 3724,
+  "spec_errors": 2260,
+  "logic_diffs": 1464,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 178.68,
+     "item_count": 16,
+     "country": "US",
+     "tier": "pro",
+     "account_age_days": 430,
+     "coupon": "BOGUS",
+     "category": "furniture",
+     "weight_kg": 0.1,
+     "is_return": false
+    },
+    "legacy": "low",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": null,
+     "item_count": 15,
+     "country": "CA",
+     "tier": "plus",
+     "account_age_days": 365,
+     "coupon": null,
+     "category": "apparel",
+     "weight_kg": 21.52,
+     "is_return": true
+    },
+    "legacy": "low",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 967.19,
+     "item_count": null,
+     "country": "JP",
+     "tier": "plus",
+     "account_age_days": 408,
+     "coupon": "BOGUS",
+     "category": "electronics",
+     "weight_kg": 32.1,
+     "is_return": false
+    },
+    "legacy": "low",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 597.22,
+     "item_count": 13,
+     "country": "DE",
+     "tier": "basic",
+     "account_age_days": 784,
+     "coupon": null,
+     "category": "furniture",
+     "weight_kg": 4.1,
+     "is_return": false
+    },
+    "legacy": "low",
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 723.17,
+     "item_count": 3,
+     "country": "DE",
+     "tier": "pro",
+     "account_age_days": 558,
+     "coupon": "VIP",
+     "category": "apparel",
+     "weight_kg": 25.87,
+     "is_return": false
+    },
+    "legacy": "low",
+    "new": "SPEC_ERROR:ValueError"
+   }
+  ]
+ },
+ {
+  "rule": "priority",
+  "band": "C",
+  "status": "ok",
+  "tests_passed": 4,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 930,
+  "spec_errors": 0,
+  "logic_diffs": 930,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1410.21,
+     "item_count": 15,
+     "country": "CA",
+     "tier": "plus",
+     "account_age_days": 14,
+     "coupon": "BOGUS",
+     "category": "furniture",
+     "weight_kg": 33.45,
+     "is_return": true
+    },
+    "legacy": "medium",
+    "new": "high"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 72.28,
+     "item_count": 20,
+     "country": "JP",
+     "tier": "basic",
+     "account_age_days": 542,
+     "coupon": "SAVE10",
+     "category": "books",
+     "weight_kg": 7.44,
+     "is_return": false
+    },
+    "legacy": "low",
+    "new": "medium"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 324.81,
+     "item_count": 8,
+     "country": "IN",
+     "tier": "pro",
+     "account_age_days": 274,
+     "coupon": "SAVE10",
+     "category": "electronics",
+     "weight_kg": 3.86,
+     "is_return": true
+    },
+    "legacy": "medium",
+    "new": "high"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 90.64,
+     "item_count": 5,
+     "country": "US",
+     "tier": "plus",
+     "account_age_days": 65,
+     "coupon": "FREESHIP",
+     "category": "books",
+     "weight_kg": 2.52,
+     "is_return": false
+    },
+    "legacy": "low",
+    "new": "medium"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 243.19,
+     "item_count": 1,
+     "country": "GB",
+     "tier": "pro",
+     "account_age_days": 434,
+     "coupon": "FREESHIP",
+     "category": "grocery",
+     "weight_kg": 9.57,
+     "is_return": true
+    },
+    "legacy": "medium",
+    "new": "high"
+   }
+  ]
+ },
+ {
+  "rule": "insurance_required",
+  "band": "C",
+  "status": "ok",
+  "tests_passed": 3,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 2269,
+  "spec_errors": 2207,
+  "logic_diffs": 62,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 178.68,
+     "item_count": 16,
+     "country": "US",
+     "tier": "pro",
+     "account_age_days": 430,
+     "coupon": "BOGUS",
+     "category": "furniture",
+     "weight_kg": 0.1,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 597.22,
+     "item_count": 13,
+     "country": "DE",
+     "tier": "basic",
+     "account_age_days": 784,
+     "coupon": null,
+     "category": "furniture",
+     "weight_kg": 4.1,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 723.17,
+     "item_count": 3,
+     "country": "DE",
+     "tier": "pro",
+     "account_age_days": 558,
+     "coupon": "VIP",
+     "category": "apparel",
+     "weight_kg": 25.87,
+     "is_return": false
+    },
+    "legacy": true,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 602.92,
+     "item_count": null,
+     "country": "CA",
+     "tier": "pro",
+     "account_age_days": 535,
+     "coupon": "FREESHIP",
+     "category": "books",
+     "weight_kg": 19.42,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 110.15,
+     "item_count": 20,
+     "country": "BR",
+     "tier": "basic",
+     "account_age_days": 335,
+     "coupon": "BOGUS",
+     "category": "apparel",
+     "weight_kg": 19.9,
+     "is_return": false
+    },
+    "legacy": false,
+    "new": "SPEC_ERROR:ValueError"
+   }
+  ]
+ },
+ {
+  "rule": "order_status",
+  "band": "C",
+  "status": "ok",
+  "tests_passed": 5,
+  "tests_total": 5,
+  "inputs": 4000,
+  "disagreements": 646,
+  "spec_errors": 0,
+  "logic_diffs": 646,
+  "examples": [
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1211.94,
+     "item_count": 1,
+     "country": "GB",
+     "tier": "basic",
+     "account_age_days": 733,
+     "coupon": "SAVE5",
+     "category": "grocery",
+     "weight_kg": 7.32,
+     "is_return": false
+    },
+    "legacy": "accept",
+    "new": "reject"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1410.21,
+     "item_count": 15,
+     "country": "CA",
+     "tier": "plus",
+     "account_age_days": 14,
+     "coupon": "BOGUS",
+     "category": "furniture",
+     "weight_kg": 33.45,
+     "is_return": true
+    },
+    "legacy": "review",
+    "new": "reject"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1038.82,
+     "item_count": 13,
+     "country": "CA",
+     "tier": "pro",
+     "account_age_days": 421,
+     "coupon": "SAVE10",
+     "category": "furniture",
+     "weight_kg": 15.04,
+     "is_return": false
+    },
+    "legacy": "accept",
+    "new": "reject"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1302.07,
+     "item_count": 5,
+     "country": "GB",
+     "tier": "plus",
+     "account_age_days": 181,
+     "coupon": "BOGUS",
+     "category": "grocery",
+     "weight_kg": 31.86,
+     "is_return": false
+    },
+    "legacy": "accept",
+    "new": "reject"
+   },
+   {
+    "kind": "random",
+    "input": {
+     "amount": 1271.8,
+     "item_count": 2,
+     "country": "JP",
+     "tier": "pro",
+     "account_age_days": 686,
+     "coupon": null,
+     "category": "apparel",
+     "weight_kg": 14.07,
+     "is_return": false
+    },
+    "legacy": "accept",
+    "new": "reject"
+   }
+  ]
+ }
+]
