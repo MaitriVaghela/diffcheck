@@ -153,17 +153,9 @@ python3 checker.py --specs specs/gpt-4o-mini --out results/gpt-4o-mini.json && p
 | `charts.py` -> `charts/` | the two charts that carry the finding |
 | `dose_response.py` | suite size vs input distribution |
 
-## Why it holds up
-
-- The engine is 19 lines (`cond_holds` + `run_table`). Nothing is hidden.
-- Rules, tests, thresholds and seed are fixed before any translation exists and
-  never edited after. Raw model output is kept beside every parsed table.
-- "No divergence found" means none appeared in 4000 inputs, not "proven equal".
 
 ## Limits
 
-- **The rules are mine.** I wrote the `or 0` that produces the core finding. The
-  class of bug is demonstrated; the *rate* needs rules mined from real codebases.
 - **The core rests on one idiom.** Two instances, one mechanism, one field type.
 - **Two runs per model is thin.** It is enough to separate a reproducible result
   from a single-run one, not enough to estimate how often the single-run kind
